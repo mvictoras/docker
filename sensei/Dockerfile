@@ -16,8 +16,7 @@ RUN  yum install -y gcc \
        libXt-devel \
        freeglut-devel \
        automake \
-       bind-utils \
-       cmake
+       bind-utils
 
 
 # CMake 3.12.3
