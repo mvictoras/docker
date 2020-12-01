@@ -16,7 +16,8 @@ RUN  yum install -y gcc \
        libXt-devel \
        freeglut-devel \
        automake \
-       bind-utils
+       bind-utils \
+       which
 
 
 # CMake 3.12.3
@@ -47,8 +48,11 @@ RUN  wget -q http://www.mpich.org/static/downloads/$MPICH_VERSION/mpich-$MPICH_V
 # this allows us to override the MPI libraries to use those
 # found via LD_LIBRARY_PATH
 
-ARG PATH=/usr/local/mpich/install/bin:$PATH
-ARG LD_LIBRARY_PATH=/usr/local/mpich/install/lib:$LD_LIBRARY_PATH
+ARG PATH_ORIG=$PATH
+ARG LD_LIBRARY_PATH_ORIG=$LD_LIBRARY_PATH
+
+ENV PATH=/usr/local/mpich/install/bin:$PATH
+ENV LD_LIBRARY_PATH=/usr/local/mpich/install/lib:$LD_LIBRARY_PATH
 
 # VTK
 WORKDIR /sensei/src
@@ -84,10 +88,12 @@ RUN git clone https://gitlab.kitware.com/sensei/sensei.git \
    && make install
 
 # Sensei config
+#ARG CC=cc
+#ARG CXX=c++
 WORKDIR /sensei/src/sensei/tools/sensei_config
-RUN ./make_install /sensei/install/sensei
+RUN sh make_install /sensei/install/sensei
 
 # Setup ENV variables
-ENV PATH=$PATH:/sensei/install/sensei/bin
-ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/sensei/install/vtk/lib64
+ENV PATH=$PATH_ORIG:/sensei/install/sensei/bin
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH_ORIG:/sensei/install/vtk/lib64
 
