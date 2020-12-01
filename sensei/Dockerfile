@@ -32,11 +32,14 @@ RUN wget https://cmake.org/files/v3.12/cmake-3.12.3.tar.gz \
 
 
 # MPICH
+# install MPICH
+ENV MPICH_VERSION=3.3
+
 WORKDIR /sensei/src
-RUN  wget -q http://www.mpich.org/static/downloads/3.2.1/mpich-3.2.1.tar.gz \
-       && tar xzf mpich-3.2.1.tar.gz \
-       && rm mpich-3.2.1.tar.gz \
-       && cd mpich-3.2.1 \
+RUN  wget -q http://www.mpich.org/static/downloads/$MPICH_VERSION/mpich-$MPICH_VERSION.tar.gz \
+       && tar xzf mpich-$MPICH_VERSION.tar.gz \
+       && rm mpich-$MPICH_VERSION.tar.gz \
+       && cd mpich-$MPICH_VERSION \
        && ./configure --prefix=/usr/local/mpich/install --disable-wrapper-rpath \
        && make -j8 \
        && make install
