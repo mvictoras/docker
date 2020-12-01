@@ -33,7 +33,7 @@ RUN wget https://cmake.org/files/v3.12/cmake-3.12.3.tar.gz \
 
 # MPICH
 # install MPICH
-ENV MPICH_VERSION=3.3
+ARG MPICH_VERSION=3.3
 
 WORKDIR /sensei/src
 RUN  wget -q http://www.mpich.org/static/downloads/$MPICH_VERSION/mpich-$MPICH_VERSION.tar.gz \
@@ -47,8 +47,8 @@ RUN  wget -q http://www.mpich.org/static/downloads/$MPICH_VERSION/mpich-$MPICH_V
 # this allows us to override the MPI libraries to use those
 # found via LD_LIBRARY_PATH
 
-ENV PATH=/usr/local/mpich/install/bin:$PATH
-ENV LD_LIBRARY_PATH=/usr/local/mpich/install/lib:$LD_LIBRARY_PATH
+ARG PATH=/usr/local/mpich/install/bin:$PATH
+ARG LD_LIBRARY_PATH=/usr/local/mpich/install/lib:$LD_LIBRARY_PATH
 
 # VTK
 WORKDIR /sensei/src
@@ -86,4 +86,8 @@ RUN git clone https://gitlab.kitware.com/sensei/sensei.git \
 # Sensei config
 WORKDIR /sensei/src/sensei/tools/sensei_config
 RUN ./make_install /sensei/install/sensei
+
+# Setup ENV variables
+ENV PATH=$PATH:/sensei/install/sensei/bin
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/sensei/install/vtk/lib64
 
