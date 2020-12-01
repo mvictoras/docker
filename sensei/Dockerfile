@@ -82,3 +82,8 @@ RUN git clone https://gitlab.kitware.com/sensei/sensei.git \
    /sensei/src/sensei \
    && make -j8 \
    && make install
+
+# Sensei config
+WORKDIR /sensei/src/sensei/tools/sensei_config
+RUN ./make_install /sensei/install/sensei
+
