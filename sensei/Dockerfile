@@ -96,4 +96,3 @@ RUN sh make_install /sensei/install/sensei
 # Setup ENV variables
 ENV PATH=$PATH_ORIG:/sensei/install/sensei/bin
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH_ORIG:/sensei/install/vtk/lib64
-
