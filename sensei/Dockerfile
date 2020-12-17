@@ -19,6 +19,22 @@ RUN  yum install -y gcc \
        bind-utils \
        which
 
+RUN yum install -y centos-release-scl
+RUN yum install -y devtoolset-7
+RUN scl enable devtoolset-7 -- bash
+# GCC 9
+#ARG GCC_VERSION=9.2.0
+#WORKDIR /sensei/src
+#RUN wget https://ftp.gnu.org/gnu/gcc/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.gz
+#RUN tar xzvf gcc-${GCC_VERSION}.tar.gz
+#RUN mkdir obj.gcc-${GCC_VERSION}
+#WORKDIR gcc-${GCC_VERSION}
+#RUN ls
+#RUN contrib/download_prerequisites
+#RUN cd ../obj.gcc-${GCC_VERSION}
+#RUN ../gcc-${GCC_VERSION}/configure --disable-multilib --enable-languages=c,c++
+#RUN make -j 8
+#RUN make install
 
 # CMake 3.12.3
  
