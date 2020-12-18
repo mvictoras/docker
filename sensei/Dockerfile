@@ -21,7 +21,8 @@ RUN  yum install -y gcc \
 
 RUN yum install -y centos-release-scl
 RUN yum install -y devtoolset-7
-RUN scl enable devtoolset-7 -- bash
+RUN scl_source enable devtoolset-7
+#RUN scl enable devtoolset-7 -- bash
 # GCC 9
 #ARG GCC_VERSION=9.2.0
 #WORKDIR /sensei/src
