@@ -66,7 +66,7 @@ RUN  zypper install -y gcc \
 
 # MPICH
 # install MPICH
-ARG MPICH_VERSION=3.3
+ARG MPICH_VERSION=3.2
 
 WORKDIR /sensei/src
 RUN  wget -q http://www.mpich.org/static/downloads/$MPICH_VERSION/mpich-$MPICH_VERSION.tar.gz \
