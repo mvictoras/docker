@@ -30,15 +30,15 @@ RUN  zypper install -y gcc \
 #RUN scl enable devtoolset-7 -- bash
 # GCC 9
 #ARG GCC_VERSION=9.2.0
-WORKDIR /sensei/src
-RUN wget http://ftp.gnu.org/gnu/gcc/gcc-7.5.0/gcc-7.5.0.tar.gz && \
-    tar -zvxf gcc-7.5.0.tar.gz --remove-files && cd gcc-7.5.0 && \
-    ./contrib/download_prerequisites && \
-    ./configure --disable-multilib && \
-    make -j`nproc` && \
-    make install -j`nproc` && \
-    cd .. && \
-    rm -rf gcc-6.5.0
+#WORKDIR /sensei/src
+#RUN wget http://ftp.gnu.org/gnu/gcc/gcc-7.5.0/gcc-7.5.0.tar.gz && \
+#    tar -zvxf gcc-7.5.0.tar.gz --remove-files && cd gcc-7.5.0 && \
+#    ./contrib/download_prerequisites && \
+#    ./configure --disable-multilib && \
+#    make -j`nproc` && \
+#    make install -j`nproc` && \
+#    cd .. && \
+#    rm -rf gcc-6.5.0
 
 #RUN wget https://ftp.gnu.org/gnu/gcc/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.gz
 #RUN tar xzvf gcc-${GCC_VERSION}.tar.gz
