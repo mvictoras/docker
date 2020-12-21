@@ -19,7 +19,8 @@ RUN  zypper install -y gcc \
        bind-utils \
        which \
        cmake \
-       tar
+       tar \
+       gzip
 
 #RUN yum install -y centos-release-scl
 #RUN yum install -y devtoolset-7
