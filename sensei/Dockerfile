@@ -1,4 +1,4 @@
-FROM centos:7
+FROM opensuse/leap:15.1
 
 RUN  mkdir /sensei
 RUN  mkdir /sensei/build
@@ -6,18 +6,20 @@ RUN  mkdir /sensei/src
 RUN  mkdir /sensei/install
 # need to install some development tools to
 # build our code
-RUN  yum update -y
-RUN  yum groupinstall -y "Development Tools"
-RUN  yum install -y gcc \
-       g++ \
+RUN  zypper update -y
+RUN  zypper install -y gcc \
+       gcc-c++ \
+       gcc-fortran \
        ncurses-devel \
        wget \
-       xorg-x11-server-Xorg xorg-x11-xauth xorg-x11-apps \
+#xorg-x11-server-Xorg xorg-x11-xauth xorg-x11-apps \
        libXt-devel \
        freeglut-devel \
        automake \
        bind-utils \
-       which
+       which \
+       cmake \
+       tar
 
 #RUN yum install -y centos-release-scl
 #RUN yum install -y devtoolset-7
@@ -50,14 +52,14 @@ RUN wget http://ftp.gnu.org/gnu/gcc/gcc-7.5.0/gcc-7.5.0.tar.gz && \
 
 # CMake 3.12.3
  
-RUN  cd /sensei/src
-RUN wget https://cmake.org/files/v3.12/cmake-3.12.3.tar.gz \
-      && tar xzf cmake-3.12.3.tar.gz \
-      && rm cmake-3.12.3.tar.gz \
-      && cd cmake-3.12.3 \
-      && ./bootstrap \
-      && make -j8 \
-      && make install
+#RUN  cd /sensei/src
+#RUN wget https://cmake.org/files/v3.12/cmake-3.12.3.tar.gz \
+#      && tar xzf cmake-3.12.3.tar.gz \
+#      && rm cmake-3.12.3.tar.gz \
+#      && cd cmake-3.12.3 \
+#      && ./bootstrap \
+#      && make -j8 \
+#      && make install
 
 
 # MPICH
