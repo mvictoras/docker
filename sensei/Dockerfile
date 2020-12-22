@@ -6,12 +6,15 @@ RUN  mkdir /sensei/src
 RUN  mkdir /sensei/install
 # need to install some development tools to
 # build our code
+RUN zypper install -y wget
+RUN wget https://registrationcenter-download.intel.com/akdlm/irc_nas/17427/l_HPCKit_p_2021.1.0.2684_offline.sh 
+
 RUN  zypper update -y
-RUN  zypper install -y gcc \
+# gcc gcc-c++ gcc-fortran
+RUN  zypper install -y gcc\
        gcc-c++ \
        gcc-fortran \
        ncurses-devel \
-       wget \
 #xorg-x11-server-Xorg xorg-x11-xauth xorg-x11-apps \
        libXt-devel \
        freeglut-devel \
@@ -23,6 +26,12 @@ RUN  zypper install -y gcc \
        gzip \
        git
 
+RUN bash l_HPCKit_p_2021.1.0.2684_offline.sh -s -a -s --eula accept
+
+RUN echo "source /opt/intel/oneapi/setvars.sh" >> /etc/profile.d/oneAPI.sh
+ENV CC=icc 
+ENV CXX=icpc
+ENV FC=ifort
 #RUN yum install -y centos-release-scl
 #RUN yum install -y devtoolset-7
 #RUN source scl_source enable devtoolset-7
@@ -73,6 +82,7 @@ RUN  wget -q http://www.mpich.org/static/downloads/$MPICH_VERSION/mpich-$MPICH_V
        && tar xzf mpich-$MPICH_VERSION.tar.gz \
        && rm mpich-$MPICH_VERSION.tar.gz \
        && cd mpich-$MPICH_VERSION \
+       && source /opt/intel/oneapi/setvars.sh \
        && ./configure --prefix=/usr/local/mpich/install --disable-wrapper-rpath \
        && make -j8 \
        && make install
@@ -94,7 +104,8 @@ RUN wget https://www.vtk.org/files/release/8.2/VTK-8.2.0.tar.gz \
 WORKDIR /sensei/build
 RUN mkdir vtk
 WORKDIR vtk
-RUN cmake \
+RUN source /opt/intel/oneapi/setvars.sh \
+  && cmake \
     -DCMAKE_INSTALL_PREFIX=/sensei/install/vtk \
     /sensei/src/VTK-8.2.0 \
   && make -j8 \
@@ -108,6 +119,7 @@ RUN git clone https://gitlab.kitware.com/sensei/sensei.git \
   && cd /sensei/build \ 
   && mkdir sensei \ 
   && cd sensei \ 
+  && source /opt/intel/oneapi/setvars.sh \
   && cmake \
      -DENABLE_SENSEI=ON \
      -DENABLE_PARALLEL3D=OFF \
