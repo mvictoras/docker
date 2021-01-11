@@ -120,8 +120,6 @@ RUN git clone https://gitlab.kitware.com/sensei/sensei.git \
   && mkdir sensei \ 
   && cd sensei \ 
   && source /opt/intel/oneapi/setvars.sh \
-  && export PATH=/usr/local/mpich/install/bin:$PATH \
-  && export LD_LIBRARY_PATH=/usr/local/mpich/install/lib:$LD_LIBRARY_PATH \
   && cmake \
      -DENABLE_SENSEI=ON \
      -DENABLE_PARALLEL3D=OFF \
@@ -129,7 +127,6 @@ RUN git clone https://gitlab.kitware.com/sensei/sensei.git \
      -DENABLE_VTK_MPI=OFF \
      -DCMAKE_INSTALL_PREFIX=/sensei/install/sensei \
      -DVTK_DIR=/sensei/install/vtk/lib64/cmake/vtk-8.2 \
-     -DMPI_HOME=/usr/local/mpich/install \
    /sensei/src/sensei \
    && make -j8 \
    && make install
@@ -138,7 +135,7 @@ RUN git clone https://gitlab.kitware.com/sensei/sensei.git \
 #ARG CC=cc
 #ARG CXX=c++
 WORKDIR /sensei/src/sensei/tools/sensei_config
-RUN source /opt/intel/oneapi/setvars.sh; sh make_install /sensei/install/sensei
+RUN sh make_install /sensei/install/sensei
 
 # Setup ENV variables
 ENV PATH=$PATH_ORIG:/sensei/install/sensei/bin
