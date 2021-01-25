@@ -96,7 +96,7 @@ RUN mkdir vtk
 WORKDIR vtk
 RUN cmake \
     -DCMAKE_INSTALL_PREFIX=/sensei/install/vtk \
-    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_BUILD_TYPE=Debug \
     /sensei/src/VTK-8.2.0 \
   && make -j8 \
   && make install
@@ -116,7 +116,7 @@ RUN git clone https://gitlab.kitware.com/sensei/sensei.git \
      -DENABLE_VTK_MPI=OFF \
      -DCMAKE_INSTALL_PREFIX=/sensei/install/sensei \
      -DVTK_DIR=/sensei/install/vtk/lib64/cmake/vtk-8.2 \
-     -DCMAKE_BUILD_TYPE=Release \
+     -DCMAKE_BUILD_TYPE=Debug \
     /sensei/src/sensei \
   && make -j8 \
   && make install
