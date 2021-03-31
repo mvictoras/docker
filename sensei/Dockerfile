@@ -12,7 +12,6 @@ RUN  zypper install -y gcc \
        gcc-fortran \
        ncurses-devel \
        wget \
-#xorg-x11-server-Xorg xorg-x11-xauth xorg-x11-apps \
        libXt-devel \
        freeglut-devel \
        automake \
@@ -22,47 +21,6 @@ RUN  zypper install -y gcc \
        tar \
        gzip \
        git
-
-#RUN yum install -y centos-release-scl
-#RUN yum install -y devtoolset-7
-#RUN source scl_source enable devtoolset-7
-#RUN echo "source scl_source enable devtoolset-7" >> /etc/bashrc
-#RUN gcc --version
-#RUN scl enable devtoolset-7 -- bash
-# GCC 9
-#ARG GCC_VERSION=9.2.0
-#WORKDIR /sensei/src
-#RUN wget http://ftp.gnu.org/gnu/gcc/gcc-7.5.0/gcc-7.5.0.tar.gz && \
-#    tar -zvxf gcc-7.5.0.tar.gz --remove-files && cd gcc-7.5.0 && \
-#    ./contrib/download_prerequisites && \
-#    ./configure --disable-multilib && \
-#    make -j`nproc` && \
-#    make install -j`nproc` && \
-#    cd .. && \
-#    rm -rf gcc-6.5.0
-
-#RUN wget https://ftp.gnu.org/gnu/gcc/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.gz
-#RUN tar xzvf gcc-${GCC_VERSION}.tar.gz
-#RUN mkdir obj.gcc-${GCC_VERSION}
-#WORKDIR gcc-${GCC_VERSION}
-#RUN ls
-#RUN contrib/download_prerequisites
-#RUN cd ../obj.gcc-${GCC_VERSION}
-#RUN ../gcc-${GCC_VERSION}/configure --disable-multilib --enable-languages=c,c++
-#RUN make -j 8
-#RUN make install
-
-# CMake 3.12.3
- 
-#RUN  cd /sensei/src
-#RUN wget https://cmake.org/files/v3.12/cmake-3.12.3.tar.gz \
-#      && tar xzf cmake-3.12.3.tar.gz \
-#      && rm cmake-3.12.3.tar.gz \
-#      && cd cmake-3.12.3 \
-#      && ./bootstrap \
-#      && make -j8 \
-#      && make install
-
 
 # MPICH
 # install MPICH
@@ -88,16 +46,17 @@ ENV LD_LIBRARY_PATH=/usr/local/mpich/install/lib:$LD_LIBRARY_PATH
 
 # VTK
 WORKDIR /sensei/src
-RUN wget https://www.vtk.org/files/release/8.2/VTK-8.2.0.tar.gz \
-  && tar xzf VTK-8.2.0.tar.gz \
-  && rm VTK-8.2.0.tar.gz
+RUN git clone --recursive https://gitlab.kitware.com/vtk/vtk.git \
+      && cd vtk \
+      && git checkout v9.0.1 \
+      && git submodule update
 WORKDIR /sensei/build
 RUN mkdir vtk
 WORKDIR vtk
 RUN cmake \
     -DCMAKE_INSTALL_PREFIX=/sensei/install/vtk \
     -DCMAKE_BUILD_TYPE=Release \
-    /sensei/src/VTK-8.2.0 \
+    /sensei/src/vtk \
   && make -j8 \
   && make install
 
@@ -105,25 +64,21 @@ RUN cmake \
 WORKDIR /sensei/src
 RUN git clone https://gitlab.kitware.com/sensei/sensei.git \
   && cd sensei \ 
-  && git checkout v2.1.1 \ 
+  && git checkout develop \ 
   && cd /sensei/build \ 
   && mkdir sensei \ 
   && cd sensei \ 
   && cmake \
      -DENABLE_SENSEI=ON \
-     -DENABLE_PARALLEL3D=OFF \
      -DENABLE_VTK_IO=ON \
-     -DENABLE_VTK_MPI=OFF \
      -DCMAKE_INSTALL_PREFIX=/sensei/install/sensei \
-     -DVTK_DIR=/sensei/install/vtk/lib64/cmake/vtk-8.2 \
+     -DVTK_DIR=/sensei/install/vtk/lib64/cmake/vtk-9.0 \
      -DCMAKE_BUILD_TYPE=Release \
     /sensei/src/sensei \
   && make -j8 \
   && make install
 
 # Sensei config
-#ARG CC=cc
-#ARG CXX=c++
 WORKDIR /sensei/src/sensei/tools/sensei_config
 RUN sh make_install /sensei/install/sensei
 
