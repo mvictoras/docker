@@ -103,12 +103,9 @@ RUN git clone https://gitlab.kitware.com/sensei/sensei.git \
      -DCMAKE_BUILD_TYPE=Release \
     /sensei/src/sensei \
  && make -j8 \
- && make install
-
-# Sensei config
-WORKDIR /sensei/src/sensei/tools/sensei_config
-RUN sh make_install /sensei/install/sensei
-
+ && make install \
+ && /sensei/src/sensei/tools/sensei_config/make_install /sensei/install/sensei
+ 
 # Setup ENV variables
 ENV PATH=$PATH_ORIG:/sensei/install/sensei/bin
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH_ORIG:/sensei/install/vtk/lib64
